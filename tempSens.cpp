@@ -1,12 +1,12 @@
 #include "tempSens.h"
 
 
-void tempSensor::initializesd(SdFat sd)
+void tempSensor::initializesd(SdFat accessedSd)
 {
   Serial.println("Initializing sd card...");
   pinMode(CS_PIN, OUTPUT);
 
-  if (sd.begin())
+  if (accessedSd.begin())
   {
     Serial.println("sd card is ready to use.");
   } else
@@ -25,12 +25,13 @@ void tempSensor::filenameSetter(String fname){
 }
 
 
-int tempSensor::editFileLog(String tempC, int waterLVL, String filename, File file, SdFat sd)
+int tempSensor::editFileLog(String tempC, int waterLVL, String filename, 
+File accessedFile, SdFat accessedSd)
 {
 
-  file = sd.open(filename, FILE_WRITE);
+  accessedFile = accessedSd.open(filename, FILE_WRITE);
   
-  if (file)
+  if (accessedFile)
   {
     file.println(tempC);
     file.println();
@@ -48,11 +49,11 @@ int tempSensor::editFileLog(String tempC, int waterLVL, String filename, File fi
 }
 
 
-String tempSensor::readLine()
+String tempSensor::readLine(File accessedFile)
 {
   String received = "";
   char ch;
-  while (file.available())
+  while (accessedFile.available())
   {
     ch = file.read();
     if (ch == '\n')

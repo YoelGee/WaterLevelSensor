@@ -8,6 +8,9 @@
 #define CLK_PIN 52
 #define SO_PIN 8
 
+File accessedFile;
+SdFat accessedSd;
+
 
 class tempSensor{
     private:
