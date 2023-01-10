@@ -1,12 +1,13 @@
 #include "tempSens.h"
 
 
-void tempSensor::initializesd(SdFat accessedSd)
+void tempSensor::initializesd()
 {
+  SdFat sd;
   Serial.println("Initializing sd card...");
   pinMode(CS_PIN, OUTPUT);
 
-  if (accessedSd.begin())
+  if (sd.begin())
   {
     Serial.println("sd card is ready to use.");
   } else
@@ -25,15 +26,23 @@ void tempSensor::filenameSetter(String fname){
 }
 
 
-int tempSensor::editFileLog(String tempC, int waterLVL, String filename, 
-File accessedFile, SdFat accessedSd)
+int tempSensor::editFileLog(String tempC, int waterLVL, String filename)
 {
 
-  accessedFile = accessedSd.open(filename, FILE_WRITE);
-  
-  if (accessedFile)
+  //accessedFile = accessedSd.open(filename, FILE_WRITE);
+  File file;
+  SdFat sd;
+  file = sd.open(filename, FILE_WRITE);
+  if (file)
   {
+    file.print("Temp at time:");
     file.println(tempC);
+    if(waterLVL == 1){
+    file.println("WaterLVL is good");
+    }
+    else if(waterLVL == 0){
+      file.println("WaterLVL is low");
+    }
     file.println();
     Serial.println("Writing to file: ");
     Serial.println(tempC);
@@ -49,11 +58,12 @@ File accessedFile, SdFat accessedSd)
 }
 
 
-String tempSensor::readLine(File accessedFile)
+String tempSensor::readLine()
 {
+  File file;
   String received = "";
   char ch;
-  while (accessedFile.available())
+  while (file.available())
   {
     ch = file.read();
     if (ch == '\n')

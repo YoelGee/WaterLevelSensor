@@ -8,8 +8,8 @@
 #define CLK_PIN 52
 #define SO_PIN 8
 
-File accessedFile;
-SdFat accessedSd;
+// File accessedFile;
+// SdFat accessedSd;
 
 
 class tempSensor{
@@ -23,9 +23,8 @@ class tempSensor{
         String readLine();
         int editFileLog(String tempC, int waterLVL, String filename);
         void filenameSetter(String fname);
-        void initializesd(SdFat sd);
+        void initializesd();
         String filenameGetter();
-        tempSensor();
 };
 
 #endif

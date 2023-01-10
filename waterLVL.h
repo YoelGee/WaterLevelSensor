@@ -11,7 +11,6 @@ class waterSensor{
     public:
         void waterLVLGetter();
 
-        waterSensor();
 
 };
 
