@@ -4,6 +4,7 @@
 #include <SPI.h>
 #include "SdFat.h"
 
+#define SPI_SPEED SD_SCK_MHZ(4)
 #define CS_PIN 53
 #define CLK_PIN 52
 #define SO_PIN 8
@@ -14,6 +15,8 @@
 
 class tempSensor{
     private:
+        //SdFat SD;
+        //File file;
         float temp;
         String filename;
     
@@ -23,7 +26,7 @@ class tempSensor{
         String readLine();
         int editFileLog(String tempC, int waterLVL, String filename);
         void filenameSetter(String fname);
-        void initializesd();
+        void initializeSD();
         String filenameGetter();
 };
 

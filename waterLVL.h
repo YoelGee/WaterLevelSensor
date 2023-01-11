@@ -1,6 +1,7 @@
 #ifndef __WATERLVL_H_
 #define __WATERLVL_H_
 
+#define SD_TYPE 1
 #define SENSOR 5
 #define BUZZER 4
 

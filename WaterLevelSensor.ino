@@ -3,6 +3,7 @@
 #include "MAX6675.h"
 
 int LiquidLVL = 0;
+bool emailSent = false;
 
 File file;
 SdFat sd;
@@ -23,20 +24,32 @@ void setup() {
   // put your setup code here, to run once:
   pinMode(SENSOR,INPUT);
   pinMode(5, OUTPUT);
+  pinMode(3, OUTPUT);
+  digitalWrite(3,HIGH);
   digitalWrite(5, HIGH);
   Serial.begin(9600);
   delay(500);
-  temp.initializesd();
-  ktc.begin(CLK_PIN, CS_PIN, SO_PIN);
-  ktc.setSPIspeed(4000000);
+  pinMode(CS_PIN, OUTPUT);
+  // if (sd.begin(CS_PIN))
+  // {
+  //   Serial.println("sd card is ready to use.");
+  // } else
+  // {
+  //   Serial.println("sd card initialization failed");
+  //   return;
+  // }
+  temp.initializeSD();
+  //ktc.begin(CLK_PIN, CS_PIN, SO_PIN);
+  //ktc.setSPIspeed(4000000);
+  delay(500);
 }
 
 void loop() {
 
-  tempFahrenheit = ktc.getTemperature();
-  tempCelcius = (tempFahrenheit-32)*(5/9);
+  //tempFahrenheit = ktc.getTemperature();
+  //tempCelcius = (tempFahrenheit-32)*(5/9);
    //tempCelcius = thermoCouple.getTemperature;
-   temp.editFileLog(String(tempCelcius), LiquidLVL, temp.filenameGetter()); //write to the file 
+   temp.editFileLog(String(tempCelcius), LiquidLVL, "prefs.txt"); //write to the file 
    Serial.print("Deg C = ");
    Serial.print(tempCelcius);
    Serial.print("\t Deg F = ");
@@ -47,6 +60,7 @@ void loop() {
   LiquidLVL = digitalRead(SENSOR);
   if(LiquidLVL == 0){
     digitalWrite(BUZZER, LOW);
+    emailSent = true;
     Serial.println("Water Level is Low");
     delay(250);
   }
@@ -55,5 +69,7 @@ void loop() {
     Serial.println("Water Level is Good");
     delay(250);
   }
+
+if(emailSent= true){}
 
 }
