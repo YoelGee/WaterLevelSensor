@@ -1,6 +1,7 @@
 #include "waterLVL.h"
 #include "tempSens.h"
 #include "MAX6675.h"
+#include "LCD.h"
 
 int LiquidLVL = 0;
 bool emailSent = false;
@@ -11,25 +12,25 @@ SdFat sd;
 tempSensor temp;
 waterSensor water;
 
-// MAX6675 ktc;
-
 float tempCelcius;
 float tempFahrenheit;
 //String
-
+LCD lcd;
 MAX6675 ktc;
-//thermoCouple.begin(CLK_PIN, CS_PIN, SO_PIN);
 
 void setup() {
   // put your setup code here, to run once:
+  lcd.startLCD();
   pinMode(SENSOR,INPUT);
   pinMode(5, OUTPUT);
   pinMode(3, OUTPUT);
   digitalWrite(3,HIGH);
   digitalWrite(5, HIGH);
   Serial.begin(9600);
-  delay(500);
-  pinMode(CS_PIN, OUTPUT);
+  //delay(500);
+  //pinMode(CS_PIN, OUTPUT);
+  ktc.begin(CLK_PIN, CS_PIN, SO_PIN);
+  ktc.setSPIspeed(4000000);
   // if (sd.begin(CS_PIN))
   // {
   //   Serial.println("sd card is ready to use.");
@@ -45,11 +46,23 @@ void setup() {
 }
 
 void loop() {
-
-  //tempFahrenheit = ktc.getTemperature();
-  //tempCelcius = (tempFahrenheit-32)*(5/9);
+  tempCelcius = ktc.getTemperature();
+  tempFahrenheit = (tempCelcius*1.8) + 32;
+  LiquidLVL = digitalRead(SENSOR);
+  lcd.updateLCD(tempCelcius, LiquidLVL);
+  if(LiquidLVL == 0){
+    digitalWrite(BUZZER, HIGH);
+    emailSent = true;
+    Serial.println("Water Level is Low");
+    delay(250);
+  }
+  else if (LiquidLVL == 1){
+    digitalWrite(BUZZER, LOW);
+    Serial.println("Water Level is Good");
+    delay(250);
+  }
    //tempCelcius = thermoCouple.getTemperature;
-   temp.editFileLog(String(tempCelcius), LiquidLVL, "prefs.txt"); //write to the file 
+   temp.editFileLog(String(tempCelcius), LiquidLVL); //write to the file 
    Serial.print("Deg C = ");
    Serial.print(tempCelcius);
    Serial.print("\t Deg F = ");
@@ -57,19 +70,8 @@ void loop() {
  
   delay(500);
   // put your main code here, to run repeatedly:
-  LiquidLVL = digitalRead(SENSOR);
-  if(LiquidLVL == 0){
-    digitalWrite(BUZZER, LOW);
-    emailSent = true;
-    Serial.println("Water Level is Low");
-    delay(250);
-  }
-  else if (LiquidLVL == 1){
-    digitalWrite(BUZZER, HIGH);
-    Serial.println("Water Level is Good");
-    delay(250);
-  }
 
 if(emailSent= true){}
 
 }
+

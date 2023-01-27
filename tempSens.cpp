@@ -1,21 +1,16 @@
 #include "tempSens.h"
 
+char line[40];
 
 void tempSensor::initializeSD()
 {
-  
-  Serial.println("Initializing sd card...");
-  //53, SPI_SPEED
   SdFat sd;
-  pinMode(CS_PIN, OUTPUT);
-  if (sd.begin())
-  {
-    Serial.println("sd card is ready to use.");
-  } else
-  {
-    Serial.println("sd card initialization failed");
+  File myFile;
+  if (!sd.begin(SD_CONFIG)) {
+    sd.initErrorHalt(&Serial);
     return;
   }
+
 }  
 
 String tempSensor::filenameGetter(){
@@ -26,35 +21,24 @@ void tempSensor::filenameSetter(String fname){
     filename = fname;
 }
 
-int tempSensor::editFileLog(String tempC, int waterLVL, String filename)
+int tempSensor::editFileLog(String tempC, int waterLVL)
 {
+  SdFat sd;
+  File file;
+  if (!file.open("WeatherBox.txt", FILE_WRITE)) {
+    error("open failed");
+  }
+  // Write test data.
+  file.print(F("Temperature (celcius) = \n"));
+  file.print(tempC);
+  if(waterLVL==1){
+    file.print(F("Water Level is stable"));
+  }
+  else if(waterLVL == 0){
+    file.print(F("Water Level is low"));
+  }
 
   //accessedFile = accessedSd.open(filename, FILE_WRITE);
-  File file;
-  SdFat sd;
-  file = sd.open(filename, FILE_WRITE);
-  if (file)
-  {
-    file.print("Temp at time: ");
-    file.println(tempC);
-    if(waterLVL == 1){
-    file.println("WaterLVL is good");
-    }
-    else if(waterLVL == 0){
-      file.println("WaterLVL is low");
-    }
-    file.println();
-    Serial.println("Writing to file: ");
-    Serial.println(tempC);
-    delay(500);
-    file.close();
-    Serial.println("File closed");
-  } 
-  else
-  {
-    Serial.println("Error opening file...");
-    return 0;
-  }
 }
 
 
