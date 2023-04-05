@@ -4,7 +4,7 @@
 //#include "MAX6675.h"
 #include "max6675.h"
 #include "SDcard.h"
-//#include "LCD.h"
+#include "LCD.h"
 #include <LCDWIKI_GUI.h> //Core graphics library
 #include <LCDWIKI_KBV.h> //Hardware-specific library
 
@@ -13,14 +13,6 @@
 #define CLK_PIN 52
 #define SO_PIN 50
 
-#define  BLACK   0x0000
-#define BLUE    0x001F
-#define RED     0xF800
-#define GREEN   0x07E0
-#define CYAN    0x07FF
-#define MAGENTA 0xF81F
-#define YELLOW  0xFFE0
-#define WHITE   0xFFFF
 
 int LiquidLVL = 0;
 bool emailSent = false;
@@ -31,7 +23,7 @@ int ktcCLK = 52;
 
 MAX6675 ktc(ktcCLK, ktcCS, ktcSO);
 //SDcard data;
-//LCD lcd;
+LCD lcd;
 bool initialize = false;
 int waterlvl[5] = {2,2,2,2,2};
 int i=0;
@@ -39,41 +31,11 @@ bool wLVL;
 float tempCelcius;
 float tempFahrenheit;
 
-LCDWIKI_KBV mylcd(ILI9486,A3,A2,A1,A0,A4);
-
-
-void updateLCD(float temp, int waterLVL){
-  mylcd.Set_Text_Mode(0);
-  //mylcd.Fill_Screen(0x0000);
-  mylcd.Set_Text_Back_colour(BLACK);
-  mylcd.Set_Text_colour(RED);
-  mylcd.Set_Text_Size(4);
-  mylcd.Print_String("Temp in C:", 0, 54);
-  mylcd.Print_Number_Float(temp, 2, 0, 114, '.', 0, ' ');  
-  mylcd.Set_Text_colour(YELLOW);
-  mylcd.Print_String("Water LEVEL:", 0, 208);
-  if(waterLVL == 1){
-  mylcd.Print_String("HIGH", 0, 268);
-  }
-  else 
-   mylcd.Print_String("LOW", 0, 268);
-
-   mylcd.Set_Text_colour(GREEN);
-   mylcd.Print_String("STATUS:", 0, 362);
-   if(temp >= 80){
-    mylcd.Print_String("HOT", 0, 422);
-   }
-   else
-    mylcd.Print_String("STABLE", 0, 422);
-}
-
-
-
 
 
 void setup() {
   // put your setup code here, to run once:
-   mylcd.Init_LCD();
+  lcd();
   pinMode(SENSOR,INPUT);
   Serial.begin(115200);
   Serial1.begin(115200);
@@ -99,7 +61,7 @@ void loop() {
   i++;
   delay(300);
   if(wLVL){
-    //updateLCD(tempCelcius, 1);
+    lcd.updateLCD(tempCelcius, 1);
     initialize = true;
     digitalWrite(BUZZER, LOW);
     emailSent = false;
@@ -113,35 +75,14 @@ void loop() {
     emailSent = true;
     initialize = false;
     }
-    //updateLCD(tempCelcius, 0);
+    lcd.updateLCD(tempCelcius, 0);
     digitalWrite(BUZZER, HIGH);
     Serial.println("Water Level is Low");
     //data.editFileLog(String(tempCelcius), 0);
     delay(250);
   }
 
-  mylcd.Set_Text_Mode(0);
-  //mylcd.Fill_Screen(0x0000);
-  mylcd.Set_Text_Back_colour(BLACK);
-  mylcd.Set_Text_colour(RED);
-  mylcd.Set_Text_Size(4);
-  mylcd.Print_String("Temp in C:", 0, 54);
-  mylcd.Print_Number_Float(tempCelcius, 2, 0, 114, '.', 0, ' ');  
-  mylcd.Set_Text_colour(YELLOW);
-  mylcd.Print_String("Water LEVEL:", 0, 208);
-  if(wLVL == 1){
-  mylcd.Print_String("HIGH", 0, 268);
-  }
-  else 
-   mylcd.Print_String("LOW", 0, 268);
 
-   mylcd.Set_Text_colour(GREEN);
-   mylcd.Print_String("STATUS:", 0, 362);
-   if(tempCelcius >= 80){
-    mylcd.Print_String("HOT", 0, 422);
-   }
-   else
-    mylcd.Print_String("STABLE", 0, 422);
   
    //tempCelcius = thermoCouple.getTemperature;
  //write to the file 
