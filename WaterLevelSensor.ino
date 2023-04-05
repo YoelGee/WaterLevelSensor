@@ -23,7 +23,7 @@ int ktcCLK = 52;
 
 MAX6675 ktc(ktcCLK, ktcCS, ktcSO);
 //SDcard data;
-LCD lcd;
+LCD lcd{};
 bool initialize = false;
 int waterlvl[5] = {2,2,2,2,2};
 int i=0;
@@ -35,7 +35,7 @@ float tempFahrenheit;
 
 void setup() {
   // put your setup code here, to run once:
-  lcd();
+  //lcd();
   pinMode(SENSOR,INPUT);
   Serial.begin(115200);
   Serial1.begin(115200);
