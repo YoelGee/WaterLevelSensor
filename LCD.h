@@ -1,24 +1,26 @@
-#ifndef LCD_H_
-#define LCD_H_
-#include "LiquidCrystal.h" 
+// #ifndef LCD_H_
+// #define LCD_H_
+// #include <LCDWIKI_GUI.h> //Core graphics library
+// #include <LCDWIKI_KBV.h> //Hardware-specific library
 
-#define valves 4
-#define pointer 2
+// #define  BLACK   0x0000
+// #define BLUE    0x001F
+// #define RED     0xF800
+// #define GREEN   0x07E0
+// #define CYAN    0x07FF
+// #define MAGENTA 0xF81F
+// #define YELLOW  0xFFE0
+// #define WHITE   0xFFFF
 
+// class LCD{
+//     private:
 
-class LCD{
-    private:
+//     public:
 
-        LiquidCrystal lcd;
+//        void updateLCD(float temp, int waterLVL);
 
-    public:
+//        LCD();
 
-       void startLCD();
+// };
 
-       void updateLCD(float temp, int waterLVL);
-
-       LCD();
-
-};
-
-#endif
+// #endif

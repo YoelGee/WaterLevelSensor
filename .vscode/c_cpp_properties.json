@@ -18,10 +18,11 @@
             "includePath": [
                 "C:\\Users\\teyko\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino",
                 "C:\\Users\\teyko\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\variants\\mega",
+                "C:\\Users\\teyko\\Documents\\Arduino\\libraries\\MAX6675_library",
                 "C:\\Users\\teyko\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\SPI\\src",
                 "C:\\Users\\teyko\\Documents\\Arduino\\libraries\\SdFat\\src",
-                "C:\\Users\\teyko\\Documents\\Arduino\\libraries\\MAX6675",
-                "C:\\Program Files (x86)\\Arduino\\libraries\\LiquidCrystal\\src",
+                "C:\\Users\\teyko\\Documents\\Arduino\\libraries\\LCDWIKI_GUI",
+                "C:\\Users\\teyko\\Documents\\Arduino\\libraries\\LCDWIKI_KBV",
                 "c:\\users\\teyko\\appdata\\local\\arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7\\lib\\gcc\\avr\\7.3.0\\include",
                 "c:\\users\\teyko\\appdata\\local\\arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7\\lib\\gcc\\avr\\7.3.0\\include-fixed",
                 "c:\\users\\teyko\\appdata\\local\\arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7\\avr\\include"
