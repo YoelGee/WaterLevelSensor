@@ -16,7 +16,7 @@ class LCD{
     private:
             LCDWIKI_KBV mylcd;
     public:
-
+        void InitializeLCD();
        void updateLCD(float temp, int waterLVL);
 
        LCD();

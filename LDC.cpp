@@ -1,7 +1,6 @@
 #include "LCD.h"
 
  LCD::LCD(): mylcd(ILI9486,A3,A2,A1,A0,A4){
-    mylcd.Init_LCD();
  }
 
 
@@ -31,6 +30,8 @@ void LCD::updateLCD(float temp, int waterLVL){
     mylcd.Print_String("STABLE", 0, 422);
 }
 
-
+void LCD::InitializeLCD(){
+    mylcd.Init_LCD();
+}
 
 

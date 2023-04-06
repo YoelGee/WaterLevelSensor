@@ -39,7 +39,7 @@ void setup() {
   pinMode(SENSOR,INPUT);
   Serial.begin(115200);
   Serial1.begin(115200);
-
+  lcd.InitializeLCD();
   //data.initializeSD();
   //Serial2.print("SendEmail\n");
   delay(500);
