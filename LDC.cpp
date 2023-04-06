@@ -6,6 +6,7 @@
 
 
 void LCD::updateLCD(float temp, int waterLVL){
+    Serial.println("Inside method");
   mylcd.Set_Text_Mode(0);
   mylcd.Fill_Screen(0x0000);
   mylcd.Set_Text_Back_colour(BLACK);

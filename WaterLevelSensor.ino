@@ -75,6 +75,7 @@ void loop() {
     emailSent = true;
     initialize = false;
     }
+    Serial.println("Before update LCD");
     lcd.updateLCD(tempCelcius, 0);
     digitalWrite(BUZZER, HIGH);
     Serial.println("Water Level is Low");
