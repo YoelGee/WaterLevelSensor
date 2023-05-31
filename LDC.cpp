@@ -5,9 +5,9 @@
 
 
 void LCD::updateLCD(float temp, int waterLVL){
-    Serial.println("Inside method");
-  mylcd.Set_Text_Mode(0);
+  //Serial.println("Inside method");
   mylcd.Fill_Screen(0x0000);
+  mylcd.Set_Text_Mode(0);
   mylcd.Set_Text_Back_colour(BLACK);
   mylcd.Set_Text_colour(RED);
   mylcd.Set_Text_Size(4);
@@ -32,6 +32,17 @@ void LCD::updateLCD(float temp, int waterLVL){
 
 void LCD::InitializeLCD(){
     mylcd.Init_LCD();
+}
+
+void LCD::StartUpLCD(){
+    mylcd.Fill_Screen(0x0000);
+    mylcd.Set_Text_Mode(0);
+    mylcd.Set_Text_Back_colour(BLACK);
+    mylcd.Set_Text_colour(YELLOW);
+    mylcd.Set_Text_Size(4);
+    mylcd.Print_String("Water LEVEL", 0, 208);
+    mylcd.Print_String("initializing", 0, 268);
+    mylcd.Print_String("PLEASE WAIT...", 0, 328);
 }
 
 

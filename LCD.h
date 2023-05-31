@@ -18,7 +18,7 @@ class LCD{
     public:
         void InitializeLCD();
        void updateLCD(float temp, int waterLVL);
-
+        void StartUpLCD ();
        LCD();
 
 };
