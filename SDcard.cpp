@@ -26,9 +26,6 @@ void SDcard::rtcInit(){
   Serial.println("End of rtc func");
 }
 
-int SDcard::getTime(){
-  return 
-}
 
 int SDcard::editFileLog(String tempC, int waterLVL) {
   File file;

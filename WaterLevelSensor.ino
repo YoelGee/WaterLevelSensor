@@ -4,7 +4,7 @@
 //#include "MAX6675.h"
 #include "max6675.h"
 #include "SDcard.h"
-//#include "LCD.h"
+#include "LCD.h"
 #include <LCDWIKI_GUI.h> //Core graphics library
 #include <LCDWIKI_KBV.h> //Hardware-specific library
 
@@ -13,13 +13,13 @@ int LiquidLVL = 0;
 bool emailSent = false;
 
 
-int ktcSO = 50;
-int ktcCS = 53;
-int ktcCLK = 52;
+int thermoDO = 37;
+int thermoCS = 53;
+int thermoCLK = 33;
 
 MAX6675 ktc(ktcCLK, ktcCS, ktcSO);
-//SDcard data;
-//LCD lcd;
+SDcard data;
+LCD lcd;
 bool initialize = false;
 int waterlvl[5] = {2,2,2,2,2};
 int i=0;
@@ -27,13 +27,13 @@ bool wLVL;
 float tempCelcius;
 float tempFahrenheit;
 
-LCDWIKI_KBV mylcd(ILI9486,A3,A2,A1,A0,A4);
+// LCD myLCD;
 //e
 
 
 void setup() {
   // put your setup code here, to run once:
-   mylcd.Init_LCD();
+   lcd.StartUpLCD();
   pinMode(SENSOR,INPUT);
   Serial.begin(115200);
   Serial1.begin(115200);
@@ -59,7 +59,7 @@ void loop() {
   i++;
   delay(300);
   if(wLVL){
-    updateLCD(tempCelcius, 1);
+    lcd.updateLCD(tempCelcius, 1);
     initialize = true;
     digitalWrite(BUZZER, LOW);
     emailSent = false;
@@ -73,7 +73,7 @@ void loop() {
     emailSent = true;
     initialize = false;
     }
-    updateLCD(tempCelcius, 0);
+    lcd.updateLCD(tempCelcius, 0);
     digitalWrite(BUZZER, HIGH);
     Serial.println("Water Level is Low");
     //data.editFileLog(String(tempCelcius), 0);
