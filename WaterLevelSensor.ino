@@ -4,130 +4,101 @@
 //#include "MAX6675.h"
 #include "max6675.h"
 #include "SDcard.h"
-#include "LCD.h"
+//#include "LCD.h"
 #include <LCDWIKI_GUI.h> //Core graphics library
 #include <LCDWIKI_KBV.h> //Hardware-specific library
-#include "RTClib.h" 
 
 
 int LiquidLVL = 0;
 bool emailSent = false;
 
-int ktcSO = 37;
+
+int ktcSO = 50;
 int ktcCS = 53;
-int ktcCLK = 33;
+int ktcCLK = 52;
 
 MAX6675 ktc(ktcCLK, ktcCS, ktcSO);
 //SDcard data;
-LCD lcd{};
-RTC_DS3231 rtc;
+//LCD lcd;
 bool initialize = false;
 int waterlvl[5] = {2,2,2,2,2};
 int i=0;
 bool wLVL;
 float tempCelcius;
 float tempFahrenheit;
-long unsigned int current_time;
 
-String data;
-DateTime targetTime;
+LCDWIKI_KBV mylcd(ILI9486,A3,A2,A1,A0,A4);
+
+
 
 void setup() {
-
+  // put your setup code here, to run once:
+   mylcd.Init_LCD();
   pinMode(SENSOR,INPUT);
   Serial.begin(115200);
   Serial1.begin(115200);
-  lcd.InitializeLCD();
-  lcd.StartUpLCD();
-  Serial.println("After LCD");
-  Serial.println("Afte RTC");
-  Serial.print("init");
-  rtc.begin();// initialize rtc
-  DateTime now = rtc.now();
-  targetTime = now + TimeSpan(0, 2, 0, 0); //2 hours from current time
 
+  data.initializeSD();
   //Serial2.print("SendEmail\n");
   delay(500);
 }
 
 void loop() {
-  DateTime now = rtc.now();
-  data = parseDate(); //adding current time/date to the data
-
-  tempCelcius = ktc.readCelsius(); // setting up thermocouple
-  data += tempCelcius; //adding temperature to the data
+  tempCelcius = ktc.readCelsius();
   tempFahrenheit = (tempCelcius*1.8) + 32;
+  if(i==5){
+    i=0;
+  }
+  LiquidLVL = digitalRead(SENSOR);
+  waterlvl[i] = LiquidLVL;
 
-  data += ", Water Level is ";
-
-  i = checkWater(i);  // resets the array index for water initialization back to 0
-  LiquidLVL = digitalRead(SENSOR); // reads current water level
-  waterlvl[i] = LiquidLVL;  // water initialization array
-  wLvLChecker(waterlvl); //checks if water has been initialized
+  wLvLChecker(waterlvl);
+  Serial.print("watrlvl ");
+  Serial.println(i);
+  Serial.println(waterlvl[i]);
   i++;
-
   delay(300);
-
   if(wLVL){
-    lcd.updateLCD(tempCelcius, LiquidLVL);
-    data+="Stable";
+    updateLCD(tempCelcius, 1);
     initialize = true;
+    digitalWrite(BUZZER, LOW);
+    emailSent = false;
     Serial.println("Water Level is Good");
+    data.editFileLog(String(tempCelcius), 1);
     delay(250);
   }
-
-  if(!wLVL)
-  {
-    data+= "Low"; // adds water level to data
-    lcd.updateLCD(tempCelcius, 0);
-    delay(250);
-  }
-
-  if(initialize){ //if water initialization is complete send data that we want to record
-    Serial1.print(data);
-
-    if(now > targetTime) { //sends an indication to the ESP to send an email every 2 hours
+  if(!wLVL & initialize == true) {
+    if(!emailSent){
     Serial1.print("SendEmail\n");
-    targetTime =  now + TimeSpan(0, 2, 0, 0); //resets 2 hour interval
+    emailSent = true;
+    initialize = false;
     }
- 
+    updateLCD(tempCelcius, 0);
+    digitalWrite(BUZZER, HIGH);
+    Serial.println("Water Level is Low");
+    //data.editFileLog(String(tempCelcius), 0);
+    delay(250);
   }
+
+
+   //tempCelcius = thermoCouple.getTemperature;
+ //write to the file
+   Serial.print("Deg C = ");
+   Serial.print(tempCelcius);
+   Serial.print("\t Deg F = ");
+   Serial.println(tempFahrenheit);
+
+  // put your main code here, to run repeatedly:
 }
 
 void wLvLChecker(int waterlvl[5]){
   for (int k = 0; k < 5; k++){
     if(waterlvl[k] != 1){
         wLVL = false;
-        Serial.print("false");
         return;
     }
     else {
       wLVL = true;
-      Serial.print("true");
     }
-  }
-}
-
-String parseDate(){
-  DateTime now = rtc.now();
-  String new_data;
-  new_data = now.year();
-  new_data += "/";
-  new_data += now.month();
-  new_data += "/";
-  new_data += now.day();
-  new_data += " ";
-  new_data += now.hour();
-  new_data += ":";
-  new_data += now.minute();
-  new_data += ":";
-  new_data += now.second();
-  new_data += " , Temperature C = ,";
-  return new_data;
-}
-
-int checkWater(int i) {
-  if(i==5){
-    return 0;
   }
 }
