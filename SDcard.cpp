@@ -29,7 +29,7 @@ void SDcard::rtcInit(){
 
 int SDcard::editFileLog(String tempC, int waterLVL) {
   File file;
-  if (!file.open("WeatherBox.csv" , FILE_WRITE)) {
+  if (!file.open(filename.c_str() , FILE_WRITE)) {
     error("open failed");
   }
   
@@ -82,8 +82,24 @@ int SDcard::editFileLog(String tempC, int waterLVL) {
   // Write a new line character and close the file
   file.println();
   file.close();
+  
 }
 
+String leadingZero(int value) {
+  if (value < 10) {
+    return "0" + String(value);
+  } else {
+    return String(value);
+  }
+}
 
+void SDcard::getFileName(){
+
+  DateTime now = rtc.now();
+
+  filename = String(now.year(), DEC) + "_" + leadingZero(now.month()) + "_" + leadingZero(now.day()) + "_" +
+                    leadingZero(now.hour()) + "-" + leadingZero(now.minute()) + "-" + leadingZero(now.second()) + ".csv";
+
+}
 
 

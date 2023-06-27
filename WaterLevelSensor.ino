@@ -5,17 +5,17 @@
 #include "max6675.h"
 #include "SDcard.h"
 #include "LCD.h"
-#include <LCDWIKI_GUI.h> //Core graphics library
-#include <LCDWIKI_KBV.h> //Hardware-specific library
+// #include <LCDWIKI_GUI.h> //Core graphics library
+// #include <LCDWIKI_KBV.h> //Hardware-specific library
 
 
 int LiquidLVL = 0;
 bool emailSent = false;
 
 
-int thermoDO = 37;
-int thermoCS = 53;
-int thermoCLK = 33;
+int ktcSO = 37;
+int ktcCS = 53;
+int ktcCLK = 33;
 
 MAX6675 ktc(ktcCLK, ktcCS, ktcSO);
 SDcard data;
@@ -33,12 +33,17 @@ float tempFahrenheit;
 
 void setup() {
   // put your setup code here, to run once:
-   lcd.StartUpLCD();
+
   pinMode(SENSOR,INPUT);
   Serial.begin(115200);
   Serial1.begin(115200);
-
+  Serial.print("SETUP\n");
+  lcd.InitializeLCD();
+  delay(500);
+  lcd.StartUpLCD();
   data.initializeSD();
+  data.rtcInit();
+  data.getFileName();
   //Serial2.print("SendEmail\n");
   delay(500);
 }
@@ -59,6 +64,11 @@ void loop() {
   i++;
   delay(300);
   if(wLVL){
+     Serial.print("Deg C = ");
+   Serial.print(tempCelcius);
+   Serial.print("\t Deg F = ");
+   Serial.println(tempFahrenheit);
+
     lcd.updateLCD(tempCelcius, 1);
     initialize = true;
     digitalWrite(BUZZER, LOW);
@@ -67,26 +77,22 @@ void loop() {
     data.editFileLog(String(tempCelcius), 1);
     delay(250);
   }
-  if(!wLVL & initialize == true) {
+  if(!wLVL & initialize) {
     if(!emailSent){
     Serial1.print("SendEmail\n");
     emailSent = true;
-    initialize = false;
+
     }
     lcd.updateLCD(tempCelcius, 0);
     digitalWrite(BUZZER, HIGH);
     Serial.println("Water Level is Low");
-    //data.editFileLog(String(tempCelcius), 0);
+    data.editFileLog(String(tempCelcius), 0);
     delay(250);
   }
 
 
    //tempCelcius = thermoCouple.getTemperature;
  //write to the file
-   Serial.print("Deg C = ");
-   Serial.print(tempCelcius);
-   Serial.print("\t Deg F = ");
-   Serial.println(tempFahrenheit);
 
   // put your main code here, to run repeatedly:
 }

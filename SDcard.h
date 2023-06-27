@@ -34,7 +34,7 @@ class SDcard{
         int editFileLog(String tempC, int waterLVL);
         void filenameSetter(String fname);
         void initializeSD();
-        String filenameGetter();
+        void getFileName();
         void rtcInit();
 
 
