@@ -13,9 +13,9 @@ int LiquidLVL = 0;
 bool emailSent = false;
 
 
-int ktcSO = 37;
-int ktcCS = 53;
-int ktcCLK = 33;
+int ktcSO = 30;
+int ktcCS = 32;
+int ktcCLK = 34;
 
 MAX6675 ktc(ktcCLK, ktcCS, ktcSO);
 SDcard data;
