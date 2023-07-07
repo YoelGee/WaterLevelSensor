@@ -27,6 +27,8 @@ class SDcard{
         RTC_DS3231 rtc;
         float temp;
         String filename;
+        String SSID;
+        String pass;
     
     public:
 
@@ -36,7 +38,9 @@ class SDcard{
         void initializeSD();
         void getFileName();
         void rtcInit();
-
+        void setWifi();
+        String getPass();
+        String getSSID();
 
 };
 

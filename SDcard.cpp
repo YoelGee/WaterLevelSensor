@@ -102,4 +102,40 @@ void SDcard::getFileName(){
 
 }
 
+void SDcard::setWifi(){
 
+  File file;
+  if(!file.open("WIFIinfo.txt", FILE_READ)){
+    error("open failed");
+  }
+
+  if(file.available()){
+
+    if(file.fgets(line, sizeof(line))){
+      SSID = String(line);
+    }
+    else{
+      error("SSID not found check text file");
+    }
+    
+    if(file.fgets(line, sizeof(line))){
+      pass = String(line);
+    }
+    else{
+      pass = "1\n";
+      error("pass not found check text file");
+    }
+
+    file.close();
+
+  }
+  
+}
+
+String SDcard::getSSID(){
+  return SSID;
+}
+
+String SDcard::getPass(){
+  return pass;
+}

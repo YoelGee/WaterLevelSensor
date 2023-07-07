@@ -44,7 +44,10 @@ void setup() {
   data.initializeSD();
   data.rtcInit();
   data.getFileName();
-  //Serial2.print("SendEmail\n");
+  data.setWifi();
+  Serial1.print(data.getSSID());
+  delay(500);
+  Serial1.print(data.getPass());
   delay(500);
 }
 
@@ -62,7 +65,7 @@ void loop() {
   Serial.println(i);
   Serial.println(waterlvl[i]);
   i++;
-  delay(300);
+  //delay(300);
   if(wLVL){
      Serial.print("Deg C = ");
    Serial.print(tempCelcius);
